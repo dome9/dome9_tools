@@ -3,21 +3,26 @@
 ## What is it?
 - A little python script that provides multiple operations on AWS security groups managed by Dome9 Security:
 - Ability to **report (CSV/ JSON format)** all security groups in multi AWS accounts, multi regions / multi VPCs setups.
-- Ability to batch **'lock'** SGs - Move to *'Dome9 Full Protection'* multiple security groups given criteria such VPC, SG names, region etc...
+- Ability to batch **'lock'** SGs - Move multiple security groups to *'Dome9 Full Protection'* given criteria such VPC, SG names,SG ids region etc...
 - Ability to batch **'unlock'** SGs - Move to *'Read-Only'* mode.
 - This is very useful for highly secured environments that do not permit changes outside of a clearly defined update window.
 
 ## Installation instructions
 - Make sure you have python version 2.5 and up.
 - Git clone this repo or download the repository zip file.
-- Set executable permissions for the script file:
+- Set execute permissions for the script file:
 
 ```bash
 cd sg_locker
 chmod +x d9_sg_locker.py
 ```
 
-- (Optional) For ease of use, set your Dome9 user(email) / api key (found in your Dome9 console-> Setting page) in environment variables : d9_user, d9_api_sec 
+- (Optional) For ease of use, set your Dome9 user(email) / api key (found in your Dome9 console-> Setting page) in environment variables : 
+
+```
+export d9_user=my@email.com
+export d9_api_sec=XXXXXXXXXXX
+```
 
 ## Usage
 
@@ -71,25 +76,25 @@ optional arguments:
 
 					
 ## Examples
-* provide CSV report for all security groups in either of these 2 regions (could be in multiple AWS accounts)
+* Generate CSV report for all security groups in either of these 2 regions (could be in multiple AWS accounts)
 
 ```
 ./d9_sg_locker.py -u my@email.com -p XXX --region us_west_2 us_east_1 -a report
 ```
 
-* provide JSON report with complex filter. SGs need to satisfy both region and name contraints
+* Generate JSON report with complex filter. SGs need to satisfy both region and name contraints
 
 ```
 ./d9_sg_locker.py -u my@email.com -p XXX --region us_east_1 --sgname=default app1 app2  -a report_json
 ```
 
-* lock (move to Dome9 Full Protection) all security groups in the VPC. User will need to acknowledge action before update occurs
+* Lock (move to Dome9 Full Protection) all security groups in the VPC. User will need to acknowledge action before update occurs
 
 ```
 ./d9_sg_locker.py -u my@email.com -p XXX --vpc vpc-12345 -a lock
 ```
 
-* unlock (move to Dome9 Read-Only mode) all security groups in the VPC. User will *not* need to acknowledge action as --ack was provided. This is important for automated deployment.
+* Unlock (move to Dome9 Read-Only mode) all security groups in the VPC. User will *not* need to acknowledge action as --ack was provided. This is important for automated deployment.
 
 ```
 ./d9_sg_locker.py -u my@email.com -p XXX --vpc vpc-12345 -a unlock --ack
