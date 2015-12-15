@@ -11,6 +11,10 @@
 import argparse, json, requests, csv, sys, os
 from requests.auth import HTTPBasicAuth
 
+# Fix Python 2.x. vs 3 raw_input compatability
+try: input = raw_input
+except NameError: pass
+
 def reporter(args):
     # Fetch data from Dome9 api
     resp = requests.get(api_end_point + 'cloudsecuritygroups?format=json', auth=HTTPBasicAuth(email, key))
@@ -27,15 +31,15 @@ def reporter(args):
             output.writerow(entry.values())
     
     if(args.action == 'report_json'):    
-        print json.dumps(filtered)
+        print(json.dumps(filtered))
         
     if args.verbose:
-        print '--- Stats ----'
+        print('--- Stats ----')
         import datetime
-        print datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-        print args
-        print 'Original data set: %d' % len(data)
-        print 'Filtered data set: %d' % len(filtered)
+        print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+        print(args)
+        print('Original data set: %d' % len(data))
+        print('Filtered data set: %d' % len(filtered))
     
     return filtered
     
@@ -72,11 +76,11 @@ if __name__ == "__main__":
     
     email = args.user or os.getenv('d9_user')
     if not email:
-        print "either provide --user parameter or d9_user environement variable"
+        print("either provide --user parameter or d9_user environement variable")
         sys.exit() 
     key = args.apisecret or os.getenv('d9_api_sec')
     if not key:
-        print "either provide --apisecret parameter or d9_api_sec environement variable"
+        print("either provide --apisecret parameter or d9_api_sec environement variable")
         sys.exit()     
     
     api_end_point = 'https://api.dome9.com/v1/'
@@ -84,12 +88,12 @@ if __name__ == "__main__":
     sgs = reporter(args)
         
     if(args.action == 'lock' or args.action == 'unlock'):
-        ack = args.ack or raw_input('You are about to update (%s) %d security groups. Continue (y/n)?' % (args.action,len(sgs)))=='y'
+        ack = args.ack or input('You are about to update (%s) %d security groups. Continue (y/n)?' % (args.action,len(sgs)))=='y'
         if not ack:
-            print 'Exiting without updating security groups.'
+            print('Exiting without updating security groups.')
             sys.exit() 
         for sg in sgs:
-            print 'Updating sg: %s>%s>%s>%s (%s) ' % (sg['CloudAccountExternalNumber'], sg['Region'], sg['Vpc'] ,sg['Name'], sg['ExternalId'])
+            print('Updating sg: %s>%s>%s>%s (%s) ' % (sg['CloudAccountExternalNumber'], sg['Region'], sg['Vpc'] ,sg['Name'], sg['ExternalId']))
             url = api_end_point + 'cloudsecuritygroups/' +  sg['Id']
             isProtected = str(args.action == 'lock').lower()
             r = requests.put(url, data = "IsProtected=%s" % isProtected, auth=HTTPBasicAuth(email, key), headers = {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"})

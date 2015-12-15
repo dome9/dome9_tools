@@ -8,7 +8,8 @@
 - This is very useful for highly secured environments that do not permit changes outside of a clearly defined update window.
 
 ## Installation instructions
-- Make sure you have python version 2.6 and up.
+- Make sure you have python installed (version 2.6 and up, 3 supported as well).
+- Make sure that the python module 'request' is installed:  https://pypi.python.org/pypi/requests
 - Git clone this repo or download the repository zip file.
 - Set execute permissions for the script file:
 
