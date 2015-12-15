@@ -8,7 +8,7 @@
 - This is very useful for highly secured environments that do not permit changes outside of a clearly defined update window.
 
 ## Installation instructions
-- Make sure you have python version 2.5 and up.
+- Make sure you have python version 2.6 and up.
 - Git clone this repo or download the repository zip file.
 - Set execute permissions for the script file:
 
@@ -85,7 +85,7 @@ optional arguments:
 * Generate JSON report with complex filter. SGs need to satisfy both region and name contraints
 
 ```
-./d9_sg_locker.py -u my@email.com -p XXX --region us_east_1 --sgname=default app1 app2  -a report_json
+./d9_sg_locker.py -u my@email.com -p XXX --region us_east_1 --sgname default app1 app2  -a report_json
 ```
 
 * Lock (move to Dome9 Full Protection) all security groups in the VPC. User will need to acknowledge action before update occurs
