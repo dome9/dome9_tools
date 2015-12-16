@@ -8,9 +8,9 @@
 - This is very useful for highly secured environments that do not permit changes outside of a clearly defined update window.
 
 ## Installation instructions
-- Make sure you have python installed (version 2.6 and up, 3 supported as well).
-- Make sure that the python module 'request' is installed:  https://pypi.python.org/pypi/requests
-- Git clone this repo or download the repository zip file.
+- Make sure that you have python installed (version 2.6 and up, ver. 3.X is supported as well).
+- Make sure that the python module 'requests' is installed:  https://pypi.python.org/pypi/requests
+- Git clone this repo or download the repository zip file (https://github.com/Dome9/dome9_tools/archive/master.zip)
 - Set execute permissions for the script file:
 
 ```bash

@@ -11,7 +11,7 @@
 import argparse, json, requests, csv, sys, os
 from requests.auth import HTTPBasicAuth
 
-# Fix Python 2.x. vs 3 raw_input compatability
+# Python 2.x. vs 3 raw_input compatibility
 try: input = raw_input
 except NameError: pass
 
