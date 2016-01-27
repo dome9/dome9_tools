@@ -1,5 +1,5 @@
 Dome9 Tools
 ----------
-A place holder for small utilities and api based scripts.
+A repository for small utilities and api based scripts and samples.
 
-Each folder is a separate utility.
+Each folder holds a separate utility / project.
