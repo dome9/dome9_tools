@@ -114,7 +114,7 @@ Resources:
         Timer:
           Type: Schedule
           Properties:
-            Schedule: 'rate(5 minute)'
+            Schedule: 'rate(5 minutes)'
       FunctionName: Dome9S3Logger
       Handler: index.handler
       Policies:
