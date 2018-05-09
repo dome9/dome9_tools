@@ -11,7 +11,6 @@ const QUEUE_URL = process.env.queueUrl; // string: https://queue.amazonaws.com/1
 const S3_BUCKET_FOR_LOGGING = process.env.s3BucketForLogging; // string: s3BucketNameHere
 const LOG_FOLDER = process.env.logFolder; // string: dome9-log/dome9AuditTrail/ (no leading forward slash)
 const LOG_FILE_PREFIX = process.env.logFilePrefix; // string: dome9AuditTrail
-const MAX_BATCHES = process.env.maxBatches; // number: 1000
 const PROCESS_MESSAGE = 'process-message';
 
 function invokePoller(functionName, message) {
@@ -119,16 +118,9 @@ function poll(functionName, callback) {
 			console.log(data);		   // successful response
 			var estBatches = Math.ceil( (data.Attributes.ApproximateNumberOfMessages / 5) )
 			console.log("Queue Size: " + data.Attributes.ApproximateNumberOfMessages + " Estimated Poll Batches: " + estBatches)
-			if (estBatches > MAX_BATCHES) {
-					var limitOfBatches = MAX_BATCHES
-					console.log("Batches have been configured to be limited to a max of " + MAX_BATCHES)
-				}
-				else {
-					var limitOfBatches = estBatches
-				};
 				
 			var i = 0;
-			while (i < limitOfBatches) {
+			while (i < estBatches) {
 				// batch request messages 
 				console.log("Processing batch #" + (i + 1));
 				SQS.receiveMessage(sqsReceiveMessageParams, (err, data) => {
@@ -149,7 +141,7 @@ function poll(functionName, callback) {
 					else {
 						const batchResult = "Woohoo! No messages to process.";
 						console.log(batchResult);
-						i = limitOfBatches;
+						i = estBatches;
 					}
 				});
 				i++;
