@@ -1,6 +1,6 @@
 # S3 Logger
 
-This tool will poll messages from SQS on a schedule user-defined and write the logs elegantly to S3.
+This tool will create an SNS Topic and SQS Queue, poll messages from SQS, and then write the logs elegantly to S3 every minute. The deployment method leverages CloudFormation and customizable using the available parameters. It is recommended to deploy two stacks to segregate Dome9 Audit Trail and Compliance Results into separate folders.
 
 ## Getting Started
 
@@ -8,45 +8,52 @@ These instructions will get you a copy of the project up and running in an AWS A
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+What cloud assets needed to install the stack
 
 ```
-* 1 SNS Topic - https://dome9-security.atlassian.net/wiki/spaces/DG/pages/30179352/Dome9+SNS+Events+Integration+-+How+to
-* 1 SQS Queue
-* 1 Lambda Function and IAM Role
-* S3 Bucket for Logging
+* S3 Bucket for Logging before deploying the CloudFormation template.
 ```
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+To install the stack in your environment simply deploy the CloudFormation template from this project.
 
-Say what the step will be
+CFT File:
 
 ```
-Lambda Environment Variables
-queueUrl : string: https://queue.amazonaws.com/123456789012/QueueNameHere
-s3BucketForLogging : string : s3BucketNameHere
-logFilePrefix : string : dome9AuditTrail
-logFolder : string : dome9-log/dome9AuditTrail/
-maxBatches : number : 1000
+s3logger_cftemplate.yaml
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
 
-## Running the tests
+## Post-Install - Configure Dome9 to send events to the new SNS Topic
 
-In Lambda you will need to configure a new test event. 
-1. Open the lambda function and find the dropdown to the left of the Test button. 
-2. Click "Configure Test events"
-3. From the Event template drop-down menu, select "Scheduled Event"
-4. Do not modify the JSON in the event as it is irrelevant.
-5. Click the Create button
-6. Click the Test button using the new test event.
+###Option 1 - Dome9 Audit Trail Events
+1. In CloudFormation, find the stack that was designated for Dome9 audit trail events and click the *Outputs* tab. 
+2. Copy the *InputTopicARN* value
+2. Log into a Dome9 account.  
+3. In the top-right, click your *username* and then click the *Account Settings* tab.
+4. Click the *SNS Integration* tab.
+5. Click *Enable*.
+6. Jump to step 4 and Paste the *InputTopicARN* value
 
-## Deployment
+###Option 2 - Dome9 Continuous Compliance Results
+1. In CloudFormation, find the stack that was designated for Dome9 compliance results and click the *Outputs* tab. 
+2. Copy the *InputTopicARN* value
+3. Log into a Dome9 account.
+4. Click the *Compliance and Governance* tab and then click *Continuous Compliance*.
+5. In the top-right, click the *Manage Notifications* button.
+6. Click *Add new policy*.
+7. Enter a policy *Name*.
+8. Click to check *SNS notification for each changed test*
+9. Paste the *InputTopicARN* value into the *SNS Topic ARN* field.
+10. Click *SEND TEST MESSAGE*.
+11. Click *Create*.
 
-Add additional notes about how to deploy this on a live system
+Additional Reference: https://dome9-security.atlassian.net/wiki/spaces/DG/pages/30179352/Dome9+SNS+Events+Integration+-+How+to
+
+## Testing
+The LogIngestionLambdaFunction is scheduled to run every minute. If you would like to run manual tests configure a test event within the lambda function.
 
 ## License
 
