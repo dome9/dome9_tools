@@ -1,35 +1,35 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Outputs:
   InputTopicARN:
-    Description: ARN that Dome9 sends events to
+    Description: 'ARN that Dome9 sends events to'
     Value:
       Ref: InputTopic
   QueueURL: 
-    Description: "URL of newly created SQS Queue"
+    Description: 'URL of newly created SQS Queue'
     Value: 
       Ref: LogsQueue
   QueueARN: 
-    Description: "ARN of newly created SQS Queue"
+    Description: 'ARN of newly created SQS Queue'
     Value: 
       Fn::GetAtt: 
         - LogsQueue
         - Arn        
-  LogWriterLambdaFunction: 
-    Description: "ARN of newly created Lambda Function"
+  LogIngestionLambdaFunction: 
+    Description: 'Name of newly created Lambda Function'
     Value: 
-      Ref: LogWriterFunction
+      Ref: LogIngestionFunction
 Parameters:
   S3BucketForLogging:
-    Default: '<S3 Bucket Name>'
-    Description: REQUIRED - S3 Bucket Name
+    Default: '<S3-Bucket-Name-Here>'
+    Description: 'REQUIRED - Target S3 Bucket for Logs (e.g. MyS3BucketName).'
     Type: String
   LogFolder:
     Default: 'dome9-logs/dome9AuditTrail/'
-    Description: REQUIRED - Log Folder
+    Description: 'REQUIRED - Log Folder. Context: s3://S3BucketName/<Log-Folder>'
     Type: String
   LogFilePrefix:
     Default: 'dome9AuditTrail'
-    Description: REQUIRED - Log File Prefix
+    Description: 'REQUIRED - Log File Prefix. Context: <Log-File-Prefix>_YYYYMMDDTHHMMZ_<Random-ID>.log'
     Type: String
 Resources:
   InputTopic:
@@ -54,7 +54,6 @@ Resources:
     DependsOn: InputTopic
     Properties:
       MessageRetentionPeriod: 1209600
-      QueueName: d9-logs-queue
       VisibilityTimeout: 30
     Type: AWS::SQS::Queue
   LogsQueuePolicy:
@@ -94,18 +93,17 @@ Resources:
       TopicArn: 
         Ref: InputTopic
     Type: AWS::SNS::Subscription
-  LogWriterFunction:
+  LogIngestionFunction:
     DependsOn: LogsQueue
     Properties:
       CodeUri: s3://dome9s3loggercft-us-east-1/dome9s3logger.zip
-      Description: SNS to SQS to S3 logging for Dome9 audit events
+      Description: 'SNS to SQS to S3 logging for Dome9 events'
       Environment:
         Variables:
           s3BucketForLogging:
             Ref: S3BucketForLogging
           queueUrl: 
             Ref: LogsQueue
-          maxBatches: 1000
           logFolder:
             Ref: LogFolder
           logFilePrefix:
@@ -114,8 +112,8 @@ Resources:
         Timer:
           Type: Schedule
           Properties:
-            Schedule: 'rate(5 minutes)'
-      FunctionName: Dome9S3Logger
+            Schedule: 'rate(1 minute)'
+      FunctionName: !Ref AWS::StackName
       Handler: index.handler
       Policies:
       - Statement:
@@ -152,10 +150,10 @@ Resources:
             Effect: Allow
             Resource: 
               Fn::GetAtt: 
-              - LogWriterFunction
+              - LogIngestionFunction
               - Arn
         Version: '2012-10-17'
       Roles:
-        - !Ref LogWriterFunctionRole
+        - !Ref LogIngestionFunctionRole
     Type: AWS::IAM::Policy
 Transform: AWS::Serverless-2016-10-31
