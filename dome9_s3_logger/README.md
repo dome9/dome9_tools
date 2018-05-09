@@ -8,9 +8,10 @@ These instructions will get you a copy of the project up and running in an AWS A
 
 ### Prerequisites
 
-Cloud assets needed to install the stack
+The following cloud assets and conditions are prerequisites to the deployment
 
 * S3 Bucket for Logging before deploying the CloudFormation template.
+* Deploy CFT in us-east-1 (N. Virgina) Region (current beta limitation)
 
 ### Installing
 
