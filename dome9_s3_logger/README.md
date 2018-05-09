@@ -8,11 +8,9 @@ These instructions will get you a copy of the project up and running in an AWS A
 
 ### Prerequisites
 
-What cloud assets needed to install the stack
+Cloud assets needed to install the stack
 
-```
 * S3 Bucket for Logging before deploying the CloudFormation template.
-```
 
 ### Installing
 
@@ -23,8 +21,6 @@ CFT File:
 ```
 s3logger_cftemplate.yaml
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Post-Install - Configure Dome9 to send events to the new SNS Topic
 
