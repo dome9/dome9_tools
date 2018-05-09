@@ -11,7 +11,7 @@ These instructions will get you a copy of the project up and running in an AWS A
 The following cloud assets and conditions are prerequisites to the deployment
 
 * S3 Bucket for Logging before deploying the CloudFormation template.
-* Deploy CFT in us-east-1 (N. Virgina) Region (current beta limitation)
+* Deploy CFT in us-east-1 (N. Virginia) Region (current beta limitation)
 
 ### Installing
 
