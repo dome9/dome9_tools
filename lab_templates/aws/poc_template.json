@@ -1,0 +1,1730 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+   "Parameters": {
+    "AmiName": {
+      "Description": "Name of an Amazon Linux AMI in this region.",
+      "Type": "String",
+      "MinLength": "12",
+      "MaxLength": "12",
+      "Default": "ami-123abc45",
+      "AllowedPattern": "ami-.*",
+      "ConstraintDescription": "Name must start with ami-*"
+    },
+    "SubnetAZa": {
+      "Description": "First Availability Zone for subnet",
+      "Type": "AWS::EC2::AvailabilityZone::Name"
+    },
+    "SubnetAZb": {
+      "Description": "Second Availability Zone for subnet",
+      "Type": "AWS::EC2::AvailabilityZone::Name"
+    },
+    "SubnetAZc": {
+      "Description": "Third Availability Zone for subnet",
+      "Type": "AWS::EC2::AvailabilityZone::Name"
+    }
+
+  },
+  "Resources": {
+    "privateSubnetA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "CidrBlock": "10.10.1.0/24",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Prod Private A"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "eb5db8c4-22df-4e72-ae65-0b7a7c5ed686"
+        }
+      }
+    },
+    "privateSubnetB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Ref": "SubnetAZb"
+        },
+        "CidrBlock": "10.10.2.0/24",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Prod Private B"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "557d87c4-051d-41b0-b1d0-88591f7972bc"
+        }
+      }
+    },
+    "privateSubnetC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Ref": "SubnetAZc"
+        },
+        "CidrBlock": "10.10.3.0/24",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Prod Private C"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "6ae1df37-537e-4e32-a715-4fd49bbc947b"
+        }
+      }
+    },
+    "PublicSubnetA": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "CidrBlock": "10.10.4.0/24",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Prod Public A"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "6fbc82b4-6b98-4efc-9312-fedaffebb2c5"
+        }
+      }
+    },
+    "PublicSubnetB": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Ref": "SubnetAZb"
+        },
+        "CidrBlock": "10.10.5.0/24",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Prod Public B"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "b2e3c5a0-9918-4927-a8ae-a77807d543b3"
+        }
+      }
+    },
+    "PublicSubnetC": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": {
+          "Ref": "SubnetAZc"
+        },
+        "CidrBlock": "10.10.6.0/24",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Prod Public C"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "5a57a4ef-8b62-489d-af0d-3e89bcf53c5e"
+        }
+      }
+    },
+    "bastionSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Bastion security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "prod-bastion-ie-sg"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "727eb5b6-7a71-4232-9300-81ffca90ccc1"
+        }
+      }
+    },
+    "MongoSg": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "MongoDB security group",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "1433",
+            "ToPort": "1433",
+            "SourceSecurityGroupId": {
+              "Ref": "LambdaSG"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "27017",
+            "ToPort": "27017",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "prod-mongo-sg"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "7e714f64-5d59-496f-9a1d-5403e93d6c55"
+        }
+      }
+    },
+    "MQSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "MQ security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3389",
+            "ToPort": "3389",
+            "SourceSecurityGroupId": {
+              "Ref": "appserverSG"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "3cab4dd2-adfb-4539-93ff-ae7dda85326e"
+        }
+      }
+    },
+    "WebappSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "WebApp security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3389",
+            "ToPort": "3389",
+            "SourceSecurityGroupId": {
+              "Ref": "bastionSG"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "CidrIp": "212.25.105.39/32"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "SourceSecurityGroupId": {
+              "Ref": "WeblbSg"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "SourceSecurityGroupId": {
+              "Ref": "WeblbSg"
+            }
+          },
+          {
+            "IpProtocol": "icmp",
+            "FromPort": "-1",
+            "ToPort": "-1",
+            "SourceSecurityGroupId": {
+              "Ref": "WeblbSg"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "aed5c613-a77c-4b77-a9d2-dace58c79469"
+        }
+      }
+    },
+    "default": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Default security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "21",
+            "ToPort": "21"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "aed5c613-a77c-4b77-a9d2-dace58c79469"
+        }
+      }
+    },
+    "DevopSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Devops security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "aed5c613-a77c-4b77-a9d2-dace58c79469"
+        }
+      }
+    },
+    "WebMonitorSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "DB Servers security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "110",
+            "ToPort": "110",
+            "SourceSecurityGroupId": {
+              "Ref": "DBServersSG"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "3cab4dd2-adfb-4539-93ff-ae7dda85326e"
+        }
+      }
+    },
+    "MonitoringSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Monitoring security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "23",
+            "ToPort": "23",
+            "CidrIp": "4.4.4.4/32"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "1433",
+            "ToPort": "1433",
+            "SourceSecurityGroupId": {
+              "Ref": "DBServersSG"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "5678",
+            "ToPort": "5678",
+            "CidrIp": "57.19.5.0/24"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "3cab4dd2-adfb-4539-93ff-ae7dda85326e"
+        }
+      }
+    },
+    "DBServersSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "DB Servers security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "1433",
+            "ToPort": "1433",
+            "SourceSecurityGroupId": {
+              "Ref": "WebappSG"
+            }
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "-1",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "3cab4dd2-adfb-4539-93ff-ae7dda85326e"
+        }
+      }
+    },
+    "appserverSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Agent Service security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "123",
+            "ToPort": "123",
+            "CidrIp": "8.8.8.8/32"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "555",
+            "ToPort": "555",
+            "SourceSecurityGroupId": {
+              "Ref": "MonitoringSG"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "80",
+            "ToPort": "80",
+            "SourceSecurityGroupId": {
+              "Ref": "WebappSG"
+            }
+          }
+        ]
+      }
+    },
+    "AgentServiceSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Agent Service security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": "7.8.9.10/32"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "22",
+            "ToPort": "22",
+            "SourceSecurityGroupId": {
+              "Ref": "WeblbSg"
+            }
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "3389",
+            "ToPort": "3389",
+            "SourceSecurityGroupId": {
+              "Ref": "DBServersSG"
+            }
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "036ce53c-4ac1-4677-8948-38414e322544"
+        }
+      }
+    },
+    "NotificationServerSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Notification server security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        }
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "c130f637-d299-4ee7-95aa-9e294fa3e6dd"
+        }
+      }
+    },
+    "D9DemoS3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "PublicRead"
+      }
+    },
+    "mongoMember1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+
+        "InstanceType": "t2.nano",
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": "True",
+            "DeleteOnTermination": "True",
+            "SubnetId": {
+              "Ref": "PublicSubnetA"
+            },
+            "DeviceIndex": "0",
+            "GroupSet": [
+              {
+                "Ref": "MongoSg"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "515623ac-8563-40f3-9185-b24120d20cf8"
+        }
+      }
+    },
+    "monitoring1": {
+      "Type": "AWS::EC2::Instance",
+      "DependsOn": [
+        "privateRoute"
+      ],
+      "Properties": {
+        "SubnetId": {
+          "Ref": "privateSubnetA"
+        },
+        "SecurityGroupIds": [
+          {
+            "Ref": "WebMonitorSG"
+          }
+        ],
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+        "InstanceType": "t2.nano",
+
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "UserData": ""
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "abe063e8-c8d2-4930-89f7-c6627f444cbb"
+        }
+      }
+    },
+    "appserver1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+
+        "InstanceType": "t2.nano",
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": "True",
+            "DeleteOnTermination": "True",
+            "SubnetId": {
+              "Ref": "PublicSubnetA"
+            },
+            "DeviceIndex": "0",
+            "GroupSet": [
+              {
+                "Ref": "appserverSG"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "515623ac-8563-40f3-9185-b24120d20cf8"
+        }
+      }
+    },
+    "appserver2": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+
+        "InstanceType": "t2.nano",
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": "True",
+            "DeleteOnTermination": "True",
+            "SubnetId": {
+              "Ref": "PublicSubnetA"
+            },
+            "DeviceIndex": "0",
+            "GroupSet": [
+              {
+                "Ref": "appserverSG"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "515623ac-8563-40f3-9185-b24120d20cf8"
+        }
+      }
+    },
+    "monitoring2": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+
+        "InstanceType": "t2.nano",
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": "True",
+            "DeleteOnTermination": "True",
+            "SubnetId": {
+              "Ref": "privateSubnetA"
+            },
+            "DeviceIndex": "0",
+            "GroupSet": [
+              {
+                "Ref": "MonitoringSG"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "bcb49bca-e1d3-4126-9c79-4e9c662f6ed8"
+        }
+      }
+    },
+    "DB1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+
+        "InstanceType": "t2.nano",
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "DB1"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          },
+          {
+            "Key": "Type",
+            "Value": "Multi-SG"
+          }
+        ],
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": "True",
+            "DeleteOnTermination": "True",
+            "SubnetId": {
+              "Ref": "PublicSubnetA"
+            },
+            "DeviceIndex": "0",
+            "GroupSet": [
+              {
+                "Ref": "DBServersSG"
+              },
+              {
+                "Ref": "default"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "bcb49bca-e1d3-4126-9c79-4e9c662f6ed8"
+        }
+      }
+    },
+    "bastion": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+        "InstanceType": "t2.nano",
+
+        "AvailabilityZone": {
+          "Ref": "SubnetAZc"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "bastion"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          },
+          {
+            "Key": "Type",
+            "Value": "prodBastion-ie"
+          }
+        ],
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": "True",
+            "DeleteOnTermination": "True",
+            "SubnetId": {
+              "Ref": "PublicSubnetC"
+            },
+            "DeviceIndex": "0",
+            "GroupSet": [
+              {
+                "Ref": "bastionSG"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "18a69329-c15d-46aa-bf3c-715aae673502"
+        }
+      }
+    },
+    "LambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "LambdaExecutionRole",
+            "Arn"
+          ]
+        },
+        "Code": {
+          "ZipFile": {
+            "Fn::Join": [
+              "",
+              [
+                "var response = require('cfn-response');",
+                "exports.handler = function(event, context) {",
+                "   var responseData = {Value: event.ResourceProperties.List};",
+                "   responseData.Value.push(event.ResourceProperties.AppendedItem);",
+                "   response.send(event, context, response.SUCCESS, responseData);",
+                "};"
+              ]
+            ]
+          }
+        },
+        "Runtime": "nodejs4.3",
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Ref": "LambdaSG"
+            }
+          ],
+          "SubnetIds": [
+            {
+              "Ref": "PublicSubnetB"
+            }
+          ]
+        }
+      }
+    },
+    "LambdaExecutionRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "lambda.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "root",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "logs:*"
+                  ],
+                  "Resource": "arn:aws:logs:*:*:*"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "ec2:CreateNetworkInterface",
+                    "ec2:DeleteNetworkInterface",
+                    "ec2:DescribeNetworkInterfaces"
+                  ],
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "LambdaSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Lambda Function security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    },
+    "WebApp1": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+
+        "InstanceType": "t2.nano",
+        "AvailabilityZone": {
+          "Ref": "SubnetAZa"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "webapp1"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          },
+          {
+            "Key": "Type",
+            "Value": "web_app"
+          }
+        ],
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/xvda",
+            "Ebs": {
+              "VolumeSize": "8"
+            }
+          }
+        ],
+        "NetworkInterfaces": [
+          {
+            "AssociatePublicIpAddress": "True",
+            "DeleteOnTermination": "True",
+            "SubnetId": {
+              "Ref": "PublicSubnetA"
+            },
+            "DeviceIndex": "0",
+            "GroupSet": [
+              {
+                "Ref": "WebappSG"
+              }
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "515623ac-8563-40f3-9185-b24120d20cf8"
+        }
+      }
+    },
+    "WebApp2": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": {
+          "Ref": "AmiName"
+        },
+
+        "InstanceType": "t2.nano",
+        "UserData": {
+         "Fn::Base64": { "Fn::Join": [ "", [
+                "#!/bin/bash -v\n",
+                "# Make certain that cfn itself is up to date \n",
+                "sudo su \n",
+                "yum update -y aws-cfn-bootstrap \n",
+
+                "# Helper function\n",
+                "function error_exit\n",
+                "{\n",
+                "  /opt/aws/bin/cfn-signal -e 1 -r \"$1\" '",  "'\n",
+                "  exit 1\n",
+                "}\n",
+
+                "# install and start httpd \n",
+                "yum install -y httpd || error_exit 'Failed to install Apache' \n",
+                "/sbin/service httpd start || error_exit 'Failed to start Apache' \n",
+                "cd /var/www/html \n",
+                "echo '<html><h1>Hello from Dome9!</h1></html>' > index.html \n",
+                "# We got here without issues (except as signaled), so signal success\n",
+                "/opt/aws/bin/cfn-signal -e 0 -r \"User data script complete\" '",  "'\n"
+              ]
+            ]
+          }
+        },
+    "AvailabilityZone": {
+      "Ref": "SubnetAZb"
+    },
+    "Tags": [
+      {
+        "Key": "Name",
+        "Value": "webapp2"
+      },
+      {
+        "Key": "env",
+        "Value": "prod"
+      },
+      {
+        "Key": "Type",
+        "Value": "web_app"
+      }
+    ],
+    "BlockDeviceMappings": [
+      {
+        "DeviceName": "/dev/xvda",
+        "Ebs": {
+          "VolumeSize": "8"
+        }
+      }
+    ],
+    "NetworkInterfaces": [
+      {
+        "AssociatePublicIpAddress": "True",
+        "DeleteOnTermination": "True",
+        "SubnetId": {
+          "Ref": "PublicSubnetB"
+        },
+        "DeviceIndex": "0",
+        "GroupSet": [
+          {
+            "Ref": "WebappSG"
+          }
+        ]
+      }
+    ]
+  },
+  "Metadata": {
+    "AWS::CloudFormation::Init": {
+      "configSets": {
+        "InstallAndRun": [
+          "Install"
+        ]
+      },
+      "Install": {
+        "packages": {
+          "yum": {
+            "httpd": []
+          }
+        },
+        "files": {
+          "/var/www/html/index.html": {
+            "source": "https://s3.amazonaws.com/cf-templates-1mqgad319u6vu-us-east-1/index.html",
+            "mode": "000600",
+            "owner": "apache",
+            "group": "apache"
+          },
+          "/etc/cfn/cfn-hup.conf": {
+            "content": {
+              "Fn::Join": [
+                "",
+                [
+                  "[main]\n",
+                  "stack=",
+                  {
+                    "Ref": "AWS::StackId"
+                  },
+                  "\n"
+                ]
+              ]
+            },
+            "mode": "000400",
+            "owner": "root",
+            "group": "root"
+          },
+          "/etc/cfn/hooks.d/cfn-auto-reloader.conf": {
+            "content": {
+              "Fn::Join": [
+                "",
+                [
+                  "[cfn-auto-reloader-hook]\n",
+                  "triggers=post.update\n",
+                  "path=Resources.WebServerInstance.Metadata.AWS::CloudFormation::Init\n",
+                  "action=/opt/aws/bin/cfn-init -v ",
+                  "         --stack ",
+                  {
+                    "Ref": "AWS::StackName"
+                  },
+                  "         --resource WebServerInstance ",
+                  "         --configsets InstallAndRun ",
+                  "         --region ",
+                  "us-east-1",
+                  "\n",
+                  "runas=root\n"
+                ]
+              ]
+            }
+          }
+        },
+        "services": {
+          "sysvinit": {
+            "httpd": {
+              "enabled": "true",
+              "ensureRunning": "true"
+            },
+            "cfn-hup": {
+              "enabled": "true",
+              "ensureRunning": "true",
+              "files": [
+                "/etc/cfn/cfn-hup.conf",
+                "/etc/cfn/hooks.d/cfn-auto-reloader.conf"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+  },
+ 	"AgentService1": {
+ 		"Type": "AWS::EC2::Instance",
+ 		"Properties": {
+ 			"ImageId": {
+ 				"Ref": "AmiName"
+ 			},
+
+ 			"InstanceType": "t2.nano",
+ 			"AvailabilityZone": {
+ 				"Ref": "SubnetAZa"
+ 			},
+
+ 			"BlockDeviceMappings": [{
+ 				"DeviceName": "/dev/xvda",
+ 				"Ebs": {
+ 					"VolumeSize": "8"
+ 				}
+ 			}],
+ 			"NetworkInterfaces": [{
+ 				"AssociatePublicIpAddress": "True",
+ 				"DeleteOnTermination": "True",
+ 				"SubnetId": {
+ 					"Ref": "PublicSubnetA"
+ 				},
+ 				"DeviceIndex": "0",
+ 				"GroupSet": [{
+ 					"Ref": "AgentServiceSG"
+ 				}]
+ 			}]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "3eca1959-3bc0-4d31-bf34-a23d194d29f5"
+ 			}
+ 		},
+ 		"DependsOn": [
+ 			"privateSubnetA"
+ 		]
+ 	},
+ 	"AgentService2": {
+ 		"Type": "AWS::EC2::Instance",
+ 		"Properties": {
+ 			"ImageId": {
+ 				"Ref": "AmiName"
+ 			},
+
+ 			"InstanceType": "t2.nano",
+ 			"AvailabilityZone": {
+ 				"Ref": "SubnetAZb"
+ 			},
+
+ 			"BlockDeviceMappings": [{
+ 				"DeviceName": "/dev/xvda",
+ 				"Ebs": {
+ 					"VolumeSize": "50"
+ 				}
+ 			}],
+ 			"NetworkInterfaces": [{
+ 				"AssociatePublicIpAddress": "True",
+ 				"DeleteOnTermination": "True",
+ 				"SubnetId": {
+ 					"Ref": "PublicSubnetB"
+ 				},
+ 				"DeviceIndex": "0",
+ 				"GroupSet": [{
+ 					"Ref": "AgentServiceSG"
+ 				}]
+ 			}]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "bcb49bca-e1d3-4126-9c79-4e9c662f6ed8"
+ 			}
+ 		}
+ 	},
+ 	"RabbitMQ1": {
+ 		"Type": "AWS::EC2::Instance",
+ 		"Properties": {
+ 			"ImageId": {
+ 				"Ref": "AmiName"
+ 			},
+
+ 			"InstanceType": "t2.nano",
+ 			"AvailabilityZone": {
+ 				"Ref": "SubnetAZa"
+ 			},
+ 			"BlockDeviceMappings": [{
+ 				"DeviceName": "/dev/xvda",
+ 				"Ebs": {
+ 					"VolumeSize": "8"
+ 				}
+ 			}],
+ 			"NetworkInterfaces": [{
+ 				"AssociatePublicIpAddress": "True",
+ 				"DeleteOnTermination": "True",
+ 				"SubnetId": {
+ 					"Ref": "PublicSubnetA"
+ 				},
+ 				"DeviceIndex": "0",
+ 				"GroupSet": [{
+ 					"Ref": "MQSG"
+ 				}]
+ 			}]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "ff8fa4f8-ae89-453f-8068-63706e88858a"
+ 			}
+ 		}
+ 	},
+ 	"NotificationServers": {
+ 		"Type": "AWS::EC2::Instance",
+ 		"Properties": {
+ 			"ImageId": {
+ 				"Ref": "AmiName"
+ 			},
+
+ 			"InstanceType": "t2.nano",
+ 			"AvailabilityZone": {
+ 				"Ref": "SubnetAZb"
+ 			},
+ 			"Tags": [{
+ 					"Key": "Name",
+ 					"Value": "notificationr"
+ 				},
+ 				{
+ 					"Key": "env",
+ 					"Value": "prod"
+ 				},
+ 				{
+ 					"Key": "Type",
+ 					"Value": "prod_notofication_ie"
+ 				}
+ 			],
+ 			"BlockDeviceMappings": [{
+ 				"DeviceName": "/dev/xvda",
+ 				"Ebs": {
+ 					"VolumeSize": "8"
+ 				}
+ 			}],
+ 			"NetworkInterfaces": [{
+ 				"AssociatePublicIpAddress": "True",
+ 				"DeleteOnTermination": "True",
+ 				"SubnetId": {
+ 					"Ref": "PublicSubnetB"
+ 				},
+ 				"DeviceIndex": "0",
+ 				"GroupSet": [{
+ 					"Ref": "NotificationServerSG"
+ 				}]
+ 			}]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "c461e3df-8ee5-4457-b9bf-b5883ee30f9f"
+ 			}
+ 		}
+ 	},
+ 	"privateSubnetsRT": {
+ 		"Type": "AWS::EC2::RouteTable",
+ 		"Properties": {
+ 			"VpcId": {
+ 				"Ref": "ProdVPC"
+ 			},
+ 			"Tags": [{
+ 					"Key": "Name",
+ 					"Value": "private subnets"
+ 				},
+ 				{
+ 					"Key": "env",
+ 					"Value": "prod"
+ 				}
+ 			]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "d4c6b5de-756d-4760-8176-c16a0773d9bd"
+ 			}
+ 		}
+ 	},
+ 	"privateRoute": {
+ 		"Type": "AWS::EC2::Route",
+ 		"Properties": {
+ 			"RouteTableId": {
+ 				"Ref": "privateSubnetsRT"
+ 			},
+ 			"DestinationCidrBlock": "0.0.0.0/0",
+ 			"GatewayId": {
+ 				"Ref": "InternetGetway"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "dc47edfc-c935-4d13-8904-3afd3c2b97f8"
+ 			}
+ 		}
+ 	},
+ 	"PublicSubnetRT": {
+ 		"Type": "AWS::EC2::RouteTable",
+ 		"Properties": {
+ 			"VpcId": {
+ 				"Ref": "ProdVPC"
+ 			},
+ 			"Tags": [{
+ 					"Key": "Name",
+ 					"Value": "public subnets"
+ 				},
+ 				{
+ 					"Key": "env",
+ 					"Value": "prod"
+ 				}
+ 			]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "ba7e8212-f19c-4e15-8876-aa4b858c2d32"
+ 			}
+ 		}
+ 	},
+ 	"publicRoute": {
+ 		"Type": "AWS::EC2::Route",
+ 		"Properties": {
+ 			"GatewayId": {
+ 				"Ref": "InternetGetway"
+ 			},
+ 			"DestinationCidrBlock": "0.0.0.0/0",
+ 			"RouteTableId": {
+ 				"Ref": "PublicSubnetRT"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "8cc425f6-c952-43bc-9306-434630a91804"
+ 			}
+ 		}
+ 	},
+ 	"publicSubnetARoute": {
+ 		"Type": "AWS::EC2::SubnetRouteTableAssociation",
+ 		"Properties": {
+ 			"RouteTableId": {
+ 				"Ref": "PublicSubnetRT"
+ 			},
+ 			"SubnetId": {
+ 				"Ref": "PublicSubnetA"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "0a44b7c5-ef2f-4247-8631-321856f09aec"
+ 			}
+ 		}
+ 	},
+ 	"publicSubnetBRoute": {
+ 		"Type": "AWS::EC2::SubnetRouteTableAssociation",
+ 		"Properties": {
+ 			"RouteTableId": {
+ 				"Ref": "PublicSubnetRT"
+ 			},
+ 			"SubnetId": {
+ 				"Ref": "PublicSubnetB"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "0a44b7c5-ef2f-4247-8631-321856f09aec"
+ 			}
+ 		}
+ 	},
+ 	"publicSubnetCRoute": {
+ 		"Type": "AWS::EC2::SubnetRouteTableAssociation",
+ 		"Properties": {
+ 			"RouteTableId": {
+ 				"Ref": "PublicSubnetRT"
+ 			},
+ 			"SubnetId": {
+ 				"Ref": "PublicSubnetC"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "0a44b7c5-ef2f-4247-8631-321856f09aec"
+ 			}
+ 		}
+ 	},
+ 	"privateSubnetARoute": {
+ 		"Type": "AWS::EC2::SubnetRouteTableAssociation",
+ 		"Properties": {
+ 			"RouteTableId": {
+ 				"Ref": "privateSubnetsRT"
+ 			},
+ 			"SubnetId": {
+ 				"Ref": "privateSubnetA"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "0a44b7c5-ef2f-4247-8631-321856f09aec"
+ 			}
+ 		}
+ 	},
+ 	"privateSubnetBRoute": {
+ 		"Type": "AWS::EC2::SubnetRouteTableAssociation",
+ 		"Properties": {
+ 			"RouteTableId": {
+ 				"Ref": "privateSubnetsRT"
+ 			},
+ 			"SubnetId": {
+ 				"Ref": "privateSubnetB"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "97d7fabd-ab6a-4eab-ab63-68edb1383290"
+ 			}
+ 		}
+ 	},
+ 	"privateSubnetCRoute": {
+ 		"Type": "AWS::EC2::SubnetRouteTableAssociation",
+ 		"Properties": {
+ 			"RouteTableId": {
+ 				"Ref": "privateSubnetsRT"
+ 			},
+ 			"SubnetId": {
+ 				"Ref": "privateSubnetC"
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "4991e48b-c8e5-40ac-a194-12c26916121c"
+ 			}
+ 		}
+ 	},
+ 	"InternetGetway": {
+ 		"Type": "AWS::EC2::InternetGateway",
+ 		"Properties": {
+ 			"Tags": [{
+ 					"Key": "Name",
+ 					"Value": "productionDG"
+ 				},
+ 				{
+ 					"Key": "env",
+ 					"Value": "prod"
+ 				}
+ 			]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "ebb61923-766f-4ebe-9189-ffe49a88c364"
+ 			}
+ 		}
+ 	},
+ 	"ProdVPC": {
+ 		"Type": "AWS::EC2::VPC",
+ 		"Properties": {
+ 			"CidrBlock": "10.10.0.0/16",
+ 			"EnableDnsHostnames": true,
+ 			"EnableDnsSupport": true,
+ 			"Tags": [{
+ 					"Key": "Name",
+ 					"Value": "productionVPC"
+ 				},
+ 				{
+ 					"Key": "env",
+ 					"Value": "prod"
+ 				}
+ 			]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "ffc998cd-85e4-4b07-8bb9-59de1092daff"
+ 			}
+ 		}
+ 	},
+ 	"AttachGateway": {
+ 		"Type": "AWS::EC2::VPCGatewayAttachment",
+ 		"Properties": {
+ 			"VpcId": {
+ 				"Ref": "ProdVPC"
+ 			},
+ 			"InternetGatewayId": {
+ 				"Ref": "InternetGetway"
+ 			}
+ 		}
+ 	},
+ 	"WebLB": {
+ 		"Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+ 		"Properties": {
+          "SecurityGroups": [
+            {
+              "Ref": "WeblbSg"
+            }
+          ],
+          "Instances": [
+            {
+              "Ref": "WebApp1"
+            },
+            {
+              "Ref": "WebApp2"
+            }
+          ],
+          "Subnets": [
+            {
+              "Ref": "PublicSubnetA"
+            },
+            {
+              "Ref": "PublicSubnetB"
+            },
+            {
+              "Ref": "PublicSubnetC"
+            }
+          ],
+ 			"LoadBalancerName": "prod-web-lb",
+ 			"Listeners": [{
+ 				"InstancePort": "80",
+ 				"InstanceProtocol": "http",
+ 				"LoadBalancerPort": "80",
+ 				"Protocol": "http"
+ 			}],
+ 			"HealthCheck": {
+ 				"HealthyThreshold": "2",
+ 				"Interval": "30",
+ 				"Target": "HTTP:80/",
+ 				"Timeout": "5",
+ 				"UnhealthyThreshold": "2"
+ 			},
+ 			"Scheme": "internet-facing",
+ 			"ConnectionSettings": {
+ 				"IdleTimeout": 150
+ 			}
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "07ea0600-6027-4ddc-8c6d-2bd35f35eca2"
+ 			}
+ 		}
+ 	},
+ 	"Alb": {
+ 		"Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+ 		"Properties": {
+ 			"SecurityGroups": [{
+ 				"Ref": "AlbSG"
+ 			}],
+ 			"Subnets": [{
+ 					"Ref": "privateSubnetA"
+ 				},
+ 				{
+ 					"Ref": "privateSubnetB"
+ 				},
+ 				{
+ 					"Ref": "privateSubnetC"
+ 				}
+ 			],
+          "LoadBalancerAttributes" : [
+      { "Key" : "idle_timeout.timeout_seconds", "Value" : "50" }],
+ 			"Scheme": "internal"
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "f73937da-19d6-4a1d-ab16-63a5469922d2"
+ 			}
+ 		}
+ 	},
+ 	"WeblbSg": {
+ 		"Type": "AWS::EC2::SecurityGroup",
+ 		"Properties": {
+ 			"GroupDescription": "Webapp ELB security group",
+ 			"VpcId": {
+ 				"Ref": "ProdVPC"
+ 			},
+ 			"SecurityGroupIngress": [{
+ 					"IpProtocol": "tcp",
+ 					"FromPort": "443",
+ 					"ToPort": "443",
+ 					"CidrIp": "0.0.0.0/0"
+ 				},
+ 				{
+ 					"IpProtocol": "tcp",
+ 					"FromPort": "80",
+ 					"ToPort": "80",
+ 					"CidrIp": "0.0.0.0/0"
+ 				}
+ 			],
+ 			"Tags": [{
+ 					"Key": "Name",
+ 					"Value": "prod-webapp-elb-sg"
+ 				},
+ 				{
+ 					"Key": "env",
+ 					"Value": "prod"
+ 				}
+ 			]
+ 		},
+ 		"Metadata": {
+ 			"AWS::CloudFormation::Designer": {
+ 				"id": "8818385b-5a0d-4aee-a6db-fb426dcc69d6"
+ 			}
+ 		}
+ 	},
+ 	"AlbSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "ALB security group",
+        "VpcId": {
+          "Ref": "ProdVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": "443",
+            "ToPort": "443",
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "prod-alb-sg"
+          },
+          {
+            "Key": "env",
+            "Value": "prod"
+          }
+        ]
+      },
+      "Metadata": {
+        "AWS::CloudFormation::Designer": {
+          "id": "67110940-d3fd-452b-8ece-447fb754591e"
+        }
+      }
+    }
+    }
+ }
