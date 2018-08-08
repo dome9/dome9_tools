@@ -1,6 +1,6 @@
 # S3 Logger
 
-This tool will create an SNS Topic and SQS Queue, poll messages from SQS, and then write the logs elegantly to S3 every minute. The deployment method leverages CloudFormation and customizable using the available parameters. It is recommended to deploy two stacks to segregate Dome9 Audit Trail and Compliance Results into separate folders.
+This tool will create an SNS Topic and SQS Queue, poll messages from SQS, and then write the logs elegantly to S3 every minute. The deployment method leverages CloudFormation and is customizable using the available parameters. It is recommended to deploy two stacks to segregate Dome9 Audit Trail and Compliance Results into separate folders.
 
 ## Getting Started
 
@@ -15,13 +15,14 @@ The following cloud assets and conditions are prerequisites to the deployment
 
 ### Installing
 
-To install the stack in your environment simply deploy the CloudFormation template from this project.
+You can deploy this stack via the link below. Pick the region that you would like it deployed in.   
 
-CFT File:
-
-```
-s3logger_cftemplate.yaml
-```
+| Region        | Launch        | 
+| ------------- |:-------------:| 
+|us-east-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
+|us-east-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-east-2.amazonaws.com/dome9s3loggercft-us-east-2/s3logger_cftemplate.yaml)|
+|us-west-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-west-1.amazonaws.com/dome9s3loggercft-us-west-1/s3logger_cftemplate.yaml)|
+|us-west-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-west-2.amazonaws.com/dome9s3loggercft-us-west-2/s3logger_cftemplate.yaml)|
 
 ## Post-Install - Configure Dome9 to send events to the new SNS Topic
 
@@ -29,7 +30,7 @@ s3logger_cftemplate.yaml
 1. In CloudFormation, find the stack that was designated for Dome9 audit trail events and click the **Outputs** tab. 
 2. Copy the **InputTopicARN** value
 2. Log into a Dome9 account.  
-3. In the top-right, click your *username* and then click the **Account Settings** tab.
+3. Click **Administration** > **Account Settings**. 
 4. Click the **SNS Integration** tab.
 5. Click **Enable**.
 6. Jump to step 4 and Paste the **InputTopicARN** value
