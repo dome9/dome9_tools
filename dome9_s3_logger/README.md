@@ -20,8 +20,8 @@ You can deploy this stack via the link below. Pick the region that you would lik
 | ------------- |:-------------:| 
 |us-east-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
 |us-east-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
-|us-west-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-west-1.amazonaws.com/dome9s3loggercft-us-west-1/s3logger_cftemplate.yaml)|
-|us-west-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-west-2.amazonaws.com/dome9s3loggercft-us-west-2/s3logger_cftemplate.yaml)|
+|us-west-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
+|us-west-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
 
 ## Post-Install - Configure Dome9 to send events to the new SNS Topic
 
