@@ -14,14 +14,9 @@ The following cloud assets and conditions are prerequisites to the deployment
 
 ### Installing
 
-You can deploy this stack via the link below. Pick the region that you would like it deployed in.   
+You can deploy this stack via the link below. The AWS region last logged into will be the region of deployment.
 
-| Region        | Launch        | 
-| ------------- |:-------------:| 
-|us-east-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
-|us-east-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
-|us-west-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
-|us-west-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
+[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)
 
 ## Post-Install - Configure Dome9 to send events to the new SNS Topic
 
