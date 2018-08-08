@@ -11,7 +11,6 @@ These instructions will get you a copy of the project up and running in an AWS A
 The following cloud assets and conditions are prerequisites to the deployment
 
 * S3 Bucket for Logging before deploying the CloudFormation template.
-* Deploy CFT in us-east-1 (N. Virginia) Region (current beta limitation)
 
 ### Installing
 
@@ -20,7 +19,7 @@ You can deploy this stack via the link below. Pick the region that you would lik
 | Region        | Launch        | 
 | ------------- |:-------------:| 
 |us-east-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
-|us-east-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-east-2.amazonaws.com/dome9s3loggercft-us-east-2/s3logger_cftemplate.yaml)|
+|us-east-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-east-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3.amazonaws.com/dome9s3loggercft-us-east-1/s3logger_cftemplate.yaml)|
 |us-west-1|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-west-1.amazonaws.com/dome9s3loggercft-us-west-1/s3logger_cftemplate.yaml)|
 |us-west-2|[<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?region=us-west-2#/stacks/new?stackName=dome9CloudBots&templateURL=https://s3-us-west-2.amazonaws.com/dome9s3loggercft-us-west-2/s3logger_cftemplate.yaml)|
 
