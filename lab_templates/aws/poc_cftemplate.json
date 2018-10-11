@@ -5,7 +5,7 @@
       "Description": "Name of an Amazon Linux AMI in this region.",
       "Type": "String",
       "MinLength": "12",
-      "MaxLength": "12",
+      "MaxLength": "21",
       "Default": "ami-123abc45",
       "AllowedPattern": "ami-.*",
       "ConstraintDescription": "Name must start with ami-*"
