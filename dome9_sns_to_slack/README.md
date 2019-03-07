@@ -3,7 +3,7 @@ Lambda function for pushing events from SNS to Slack
 
 Modified from the Cloudwatch to Slack template and adopted for Dome9  1.19.2017
 
-Link to blog: https://dome9.com/blog/dome9-integration-slack/
+Link to blog: https://blog.checkpoint.com/2017/02/28/dome9-integration-slack/
 
 ## Variables needed
 - hookUrl - slack webhook url
