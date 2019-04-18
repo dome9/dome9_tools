@@ -146,7 +146,7 @@ Resources:
             - LogsQueue
             - Arn
         Version: '2012-10-17'
-      Runtime: nodejs6.10
+      Runtime: nodejs8.10
       Timeout: 120
     Type: AWS::Serverless::Function
   LambdaSelfInvokePolicy:
