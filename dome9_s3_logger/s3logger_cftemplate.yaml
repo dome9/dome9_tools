@@ -101,10 +101,10 @@ Resources:
         Bucket: 
           Fn::Join:
           - ''
-          - - 'dome9s3loggercft-'
+          - - 'dome9-tools-'
             - !Ref 'AWS::Region'
           # If deploying CFT manually, replace this join with a string (e.g. "Bucket: my-custom-bucket-name"
-        Key: 'dome9s3logger.zip'
+        Key: 'dome9s3logger/dome9s3logger.zip'
         # Key is the name of the zip file which contains s3_logger.js
       Description: 'SNS to SQS to S3 logging for Dome9 events'
       Environment:
