@@ -68,18 +68,20 @@ function processEvent(event, callback) {
     
     // Process severity filters
     if (! severityFilter) {
-        severityFilter = "high,medium,low";
+        severityFilter = "high,medium";
     }
     var sevFilterArray = severityFilter.toLowerCase().split(',');
     if (! sevFilterArray.includes(message.rule.severity.toLowerCase()) ) {
         if (debug) {
             console.log('From SNS:', message);
         }
-        console.log(`Finding dropped due to severity filter of ${message.rule.severity}. Severity levels allowed: ${severityFilter}`);
+        var cbMsg = `Finding dropped due to severity filter of ${message.rule.severity}. Severity levels allowed: ${severityFilter}`;
+        callback(cbMsg)
     }
     else {
         console.log('From SNS:', message);
     }
+    console.log(severityFilter)
     
     // Format message bits
     
@@ -120,6 +122,15 @@ function processEvent(event, callback) {
 
     var formatted_severity = `${message.rule.severity} ${severity_icon}`;
     
+    /// Region 
+    var formatted_region = '';
+    if (message.region) {
+        formatted_region = message.region;
+    }
+    else {
+        formatted_region = "n/a";
+    }
+        
     /// Rule ID
     var formatted_ruleId = '';
     if (message.rule.ruleId) {
@@ -130,7 +141,7 @@ function processEvent(event, callback) {
     }
     
     /// Entity
-     var formatted_entityId = '';
+    var formatted_entityId = '';
     if (message.entity.type == "SecurityGroup") {
         formatted_entityId = `<https://secure.dome9.com/v2/security-group/${message.account.vendor.toLowerCase()}/${message.entity.id}|${message.entity.id}>`;
     }
@@ -147,10 +158,18 @@ function processEvent(event, callback) {
         formatted_account_id = message.account.id;
     }
     
-    var formatted_account = `<https://secure.dome9.com/v2/cloud-account/${message.account.vendor.toLowerCase()}/${message.account.dome9CloudAccountId}|${message.account.name}> (${message.account.vendor}: ${formatted_account_id})`;
+    var formatted_accountname = '';
+        if (message.account.name) {
+        formatted_accountname = message.account.name;
+    }
+    else {
+        formatted_accountname = message.account.id;
+    }
+    
+    var formatted_account = `<https://secure.dome9.com/v2/cloud-account/${message.account.vendor.toLowerCase()}/${message.account.dome9CloudAccountId}|${formatted_accountname}> (${message.account.vendor}: ${formatted_account_id})`;
     
     // Construct final message
-    var formatted_message = `${formatted_header} \n${message.rule.name} \n>*Status*: ${message.status} \n>*Severity Level*: ${formatted_severity} \n>*Region*: ${message.region} \n>*Rule*: ${message.rule.name} \n>*Rule ID*: ${formatted_ruleId} \n>*Account*: ${formatted_account} \n>*Entity*: ${message.entity.type} (${formatted_entityId})`;
+    var formatted_message = `${formatted_header} \n${message.rule.name} \n>*Status*: ${message.status} \n>*Severity Level*: ${formatted_severity} \n>*Region*: ${formatted_region} \n>*Rule ID*: ${formatted_ruleId} \n>*Account*: ${formatted_account} \n>*Entity*: ${message.entity.type} (${formatted_entityId})`;
 
     const slackMessage = {
         channel: slackChannel,
