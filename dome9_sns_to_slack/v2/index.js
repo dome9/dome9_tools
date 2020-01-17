@@ -75,13 +75,12 @@ function processEvent(event, callback) {
         if (debug) {
             console.log('From SNS:', message);
         }
-        var cbMsg = `Finding dropped due to severity filter of ${message.rule.severity}. Severity levels allowed: ${severityFilter}`;
-        callback(cbMsg)
-    }
-    else {
+        console.log(`Finding dropped due to severity filter of ${message.rule.severity}. Severity levels allowed: ${severityFilter}`);
+        callback(null);
+        return null;
+    } else {
         console.log('From SNS:', message);
     }
-    console.log(severityFilter)
     
     // Format message bits
     
