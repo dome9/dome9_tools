@@ -55,8 +55,9 @@ zip my-function.zip index.js
 A Lambda Execution role ARN is needed for this step.
 
 ```bash
-# Provide Lambda Execution Role ARN
+# Set the target AWS region (e.g. us-east-1)
 aws configure set region <AWS Region ID>
+# Provide Lambda Execution Role ARN
 aws lambda create-function \
 --function-name d9-compliance-findings-to-slack \
 --runtime nodejs10.x \
