@@ -33,19 +33,24 @@ The stack has three parameters
 1. In CloudFormation, find the stack that was designated for Dome9 compliance results and click the **Outputs** tab. 
 1. Copy the **InputTopicARN** value.
 1. Log into a Dome9 account.
-1. Select **Policies** in the  **Compliance and Governance** menu.
+1. Select **Alerting and Notifications** > **Notifications**.
 1. In the top-right, click  **ADD NOTIFICATION**.
 1. Enter a policy **Name**.
 1. Click to check **SNS notification for each new finding as soon as it is discovered**.
 1. Paste the **InputTopicARN** value into the **SNS Topic ARN** field.
 1. Click **SEND TEST MESSAGE**.
 1. Click **SAVE**.
+1. Select **Posture Management** > **Compliance Policies**.
+1. In the top-right, click  **ADD POLICY** > **Cloud Account Policy**.
+1. Go through the wizard to select the relevant accounts and rulesets.
+1. Under **Notifications**, select the Notification policy created earlier for SNS.
+1. Click **SAVE**
 
 ### Dome9 Audit Trail Events
 1. In CloudFormation, find the stack that was designated for Dome9 audit trail events and select the **Outputs** tab. 
 1. Copy the **InputTopicARN** value.
 1. Log into a Dome9 account.  
-1. Click **Administration** > **Account Settings**. 
+1. Click **Settings** > **Integrations**. 
 1. Click the **SNS Integration** tab.
 1. Click **Enable**.
 1. In the pop up window, paste the **InputTopicARN** value (step 4).
