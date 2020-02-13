@@ -6,7 +6,7 @@
 # severity level is supported.
 #
 #
-# Copywrite 2019, Check Point Software
+# Copywrite 2020, Check Point Software
 # www.checkpoint.com
 # *******************************************************************************
 
@@ -65,6 +65,16 @@ function processEvent(event, callback) {
     // Prepare message
     var debug = false;
     var message = JSON.parse(event.Records[0].Sns.Message);
+    
+    // Process message status
+    if (message.status == 'Passed') {
+        if (debug) {
+            console.log('From SNS:', message);
+        }
+        console.log(`Finding dropped due to status of PASSED and to reduce noise.`);
+        callback(null);
+        return null;
+    }
     
     // Process severity filters
     if (! severityFilter) {
