@@ -15,6 +15,7 @@ The following cloud assets and conditions are prerequisites to the deployment
 ### Installation
 
 Click the link below to deploy this stack. The AWS region last logged into will be the region of deployment.
+> **Note: If you plan to use this tool for both Dome9 Compliance findings and Audit trail events you will deploy the stack _twice_ and then configure the S3 bucket, folder names, and log file prefix accordingly. You will also need a separate SNS topic for each source. **
 
 The stack has three parameters
 
