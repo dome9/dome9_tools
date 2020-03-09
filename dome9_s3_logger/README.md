@@ -35,6 +35,21 @@ The stack has three parameters
 ### Verify Lambda Execution Role Permissions
 * Ensure the new Lambda Execution role has permissions to put objects in the S3 bucket specified during the CloudFormation deployment.
 
+```
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Resource": ["arn:aws:s3:::test/*"]
+    }
+  ]
+}
+```
+
 ### Set up a Notification Policy for Continuous Compliance Findings
 1. In CloudFormation, find the stack that was designated for Dome9 compliance results and click the **Outputs** tab. 
 1. Copy the **InputTopicARN** value.
