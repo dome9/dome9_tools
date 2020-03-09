@@ -15,7 +15,7 @@ The following cloud assets and conditions are prerequisites to the deployment
 ### Installation
 
 Click the link below to deploy this stack. The AWS region last logged into will be the region of deployment.
-> Note: If you plan to use this tool for both Dome9 Compliance findings and Audit trail events you will deploy the stack _twice_ and then configure the S3 bucket, folder names, and log file prefix accordingly. You will also need a separate SNS topic for each source. 
+> Note: If you plan to use this tool for both Dome9 Compliance findings and Audit trail events you will deploy the stack _twice_ and then configure the S3 bucket, folder names, and log file prefix accordingly. The SNS topic (InputTopicARN) created from each CFT deployment is intended to be mapped to specific use case (see below) of Compliance or Audit. 
 
 The stack has three parameters
 
@@ -50,7 +50,7 @@ The stack has three parameters
 }
 ```
 
-### Set up a Notification Policy for Continuous Compliance Findings
+### Use Case #1: Continuous Compliance Findings
 1. In CloudFormation, find the stack that was designated for Dome9 compliance results and click the **Outputs** tab. 
 1. Copy the **InputTopicARN** value.
 1. Log into a Dome9 account.
@@ -67,7 +67,7 @@ The stack has three parameters
 1. Under **Notifications**, select the Notification policy created earlier for SNS.
 1. Click **SAVE**
 
-### Dome9 Audit Trail Events
+### Use Case #2: Dome9 Audit Trail Events
 1. In CloudFormation, find the stack that was designated for Dome9 audit trail events and select the **Outputs** tab. 
 1. Copy the **InputTopicARN** value.
 1. Log into a Dome9 account.  
