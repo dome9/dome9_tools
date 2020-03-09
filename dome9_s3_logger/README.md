@@ -29,6 +29,9 @@ The stack has three parameters
 
 ## Post-Install - Configure Dome9 to send events to the new SNS Topic
 
+### Verify Lambda Execution Role Permissions
+* Ensure the new Lambda Execution role has permissions to put objects in the S3 bucket specified during the CloudFormation deployment.
+
 ### Set up a Notification Policy for Continuous Compliance Findings
 1. In CloudFormation, find the stack that was designated for Dome9 compliance results and click the **Outputs** tab. 
 1. Copy the **InputTopicARN** value.

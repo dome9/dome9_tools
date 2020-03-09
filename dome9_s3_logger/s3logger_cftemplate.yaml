@@ -31,6 +31,10 @@ Parameters:
     Default: 'dome9AuditTrail'
     Description: 'REQUIRED - Log File Prefix. Context: <Log-File-Prefix>_YYYYMMDDTHHMMZ_<Random-ID>.log'
     Type: String
+  isGzipEnabled:
+    Default: 'true'
+    Description: 'REQUIRED - Enable GZIP compression and logfile extension.'
+    Type: String
 Resources:
   InputTopic:
     Type: AWS::SNS::Topic
@@ -123,7 +127,7 @@ Resources:
           Properties:
             Schedule: 'rate(1 minute)'
       FunctionName: !Ref AWS::StackName
-      Handler: index.handler
+      Handler: s3_logger.handler
       Policies:
       - Statement:
         - Action:
@@ -146,7 +150,7 @@ Resources:
             - LogsQueue
             - Arn
         Version: '2012-10-17'
-      Runtime: nodejs8.10
+      Runtime: nodejs12.x
       Timeout: 120
     Type: AWS::Serverless::Function
   LambdaSelfInvokePolicy:
