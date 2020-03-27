@@ -31,7 +31,7 @@ Parameters:
     Default: 'dome9AuditTrail'
     Description: 'REQUIRED - Log File Prefix. Context: <Log-File-Prefix>_YYYYMMDDTHHMMZ_<Random-ID>.log'
     Type: String
-  isGzipEnabled:
+  IsGzipEnabled:
     Default: 'true'
     Description: 'REQUIRED - Enable GZIP compression and logfile extension.'
     Type: String
@@ -121,6 +121,8 @@ Resources:
             Ref: LogFolder
           logFilePrefix:
             Ref: LogFilePrefix
+          isGzipEnabled:
+            Ref: IsGzipEnabled
       Events:
         Timer:
           Type: Schedule

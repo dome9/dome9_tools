@@ -17,7 +17,9 @@ The following cloud assets and conditions are prerequisites to the deployment
 Click the link below to deploy this stack. The AWS region last logged into will be the region of deployment.
 > Note: If you plan to use this tool for both Dome9 Compliance findings and Audit trail events you will deploy the stack _twice_ and then configure the S3 bucket, folder names, and log file prefix accordingly. The SNS topic (InputTopicARN) created from each CFT deployment is intended to be mapped to specific use case (see below) of Compliance or Audit. 
 
-The stack has three parameters
+The stack has five parameters
+
+**queueUrl** - the SQS queue which recieves messages from SNS (auto-populated from CFT)
 
 **S3BucketForLogging** - this is the S3 bucket
 
@@ -33,7 +35,7 @@ The stack has three parameters
 ## Post-Install - Configure Dome9 to send events to the new SNS Topic
 
 ### Verify Lambda Execution Role Permissions
-* Ensure the new Lambda Execution role has permissions to put objects in the S3 bucket specified during the CloudFormation deployment.
+* Ensure the Lambda Execution role has permissions to put objects in the S3 bucket specified during the CloudFormation deployment. This is done automatically during CFT deployment, however changes made after deployment are not tracked.
 
 ```
 {
