@@ -32,26 +32,6 @@ The stack has five parameters
 
 [<img src="docs/pictures/cloudformation-launch-stack.png">](https://console.aws.amazon.com/cloudformation/home?#/stacks/new?stackName=dome9s3Logger&templateURL=https://dome9-tools-us-east-1.s3.amazonaws.com/dome9s3logger/s3logger_cftemplate.yaml)
 
-## Post-Install - Configure Dome9 to send events to the new SNS Topic
-
-### Verify Lambda Execution Role Permissions
-* Ensure the Lambda Execution role has permissions to put objects in the S3 bucket specified during the CloudFormation deployment. This is done automatically during CFT deployment, however changes made after deployment are not tracked.
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:PutObject"
-      ],
-      "Resource": ["arn:aws:s3:::test/*"]
-    }
-  ]
-}
-```
-
 ### Use Case #1: Continuous Compliance Findings
 1. In CloudFormation, find the stack that was designated for Dome9 compliance results and click the **Outputs** tab. 
 1. Copy the **InputTopicARN** value.
