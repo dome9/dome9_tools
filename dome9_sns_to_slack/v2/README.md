@@ -46,8 +46,8 @@ Dome9 Continuous Compliance -> SNS -> Lambda Function (index.js) -> Slack Webhoo
 Login to a system with the AWS CLI installed. (e.g. Amazon Linux)
 ```bash
 yum install git zip -y
-git clone https://github.com/mambroziak/dome9-compliance-findings-to-slack.git
-cd dome9-compliance-findings-to-slack/
+git clone https://github.com/dome9/dome9_tools.git
+cd dome9_tools/dome9-compliance-findings-to-slack/v2/
 zip my-function.zip index.js
 ```
 
